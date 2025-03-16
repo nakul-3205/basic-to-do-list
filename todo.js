@@ -4,33 +4,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const addtask = document.getElementById("addtaskbutton");
     const todolist = document.getElementById("todolist");
 
-    let task = JSON.parse(localStorage.getItem("task")) || []; // Load tasks on page load
+    let task = JSON.parse(localStorage.getItem("task")) || []; 
 
-    renderAllTasks(); // First render of existing tasks
+    renderAllTasks(); 
 
     addtask.addEventListener('click', function () {
         const tasktext = todoinput.value.trim();
-        if (tasktext === "") return; // Prevent empty task
+        if (tasktext === "") return; 
 
         const newtask = {
-            id: Date.now(), // unique id
+            id: Date.now(), 
             text: tasktext,
             completed: false
         };
 
-        task.push(newtask); // Add to array
-        savetasks(); // Save to localStorage
-        renderAllTasks(); // Show updated list
-        todoinput.value = ""; // Clear input
+        task.push(newtask); 
+        savetasks();  
+        renderAllTasks(); 
+        todoinput.value = ""; 
     });
 
-    // Function to render all tasks
     function renderAllTasks() {
-        todolist.innerHTML = ""; // Clear old list
-        task.forEach((t) => rendertask(t)); // Render each task
+        todolist.innerHTML = ""; 
+        task.forEach((t) => rendertask(t)); 
     }
 
-    // Function to render a single task
     function rendertask(singleTask) {
         const li = document.createElement("li");
         li.setAttribute('data-id', singleTask.id);
@@ -41,25 +39,22 @@ document.addEventListener("DOMContentLoaded", function () {
             <button class="delete-btn">Delete</button>
         `;
 
-        // Toggle complete on clicking task text
         li.querySelector('span').addEventListener("click", function () {
             singleTask.completed = !singleTask.completed;
             savetasks();
-            renderAllTasks(); // Refresh list
+            renderAllTasks();
         });
 
-        // Delete on clicking delete button
         li.querySelector('.delete-btn').addEventListener("click", function (e) {
-            e.stopPropagation(); // Prevent triggering toggle
-            task = task.filter(t => t.id !== singleTask.id); // Remove from array
+            e.stopPropagation(); 
+            task = task.filter(t => t.id !== singleTask.id); 
             savetasks();
-            renderAllTasks(); // Refresh list
+            renderAllTasks(); 
         });
 
         todolist.appendChild(li);
     }
 
-    // Save tasks to localStorage
     function savetasks() {
         localStorage.setItem('task', JSON.stringify(task));
     }
